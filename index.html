@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="js/vendor/jquery-1.11.3.min.js"></script>
+
+    <!-- custom -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- javascript -->
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/userSetup.js"></script>
+    <script type="text/javascript" src="js/battlefieldSetup.js"></script>
+
+</head>
+<body>
+    <section class="instruction">
+        <h1>Play Battleship</h1>
+        <div class="text">
+            It's time to play! Just press start.
+        </div>
+        <button id="start_setup">Start</button>
+    </section>
+
+    <section class="setup">
+        <div class="description">
+            <p>Choose a position for each of your ships! </p>
+            <p>Therefor, just select 1-10 for horizontal (x-axis) and A-J for vertical (y-axis) position.</p>
+            <div>Rules:
+                <ul>
+                    <li>Ships are allowed to touch, but not to overlap! </li>
+                    <li>..</li>
+                </ul>
+            </div>
+            <div class="selected">
+                TODO: write down, start-end of selected ships
+            </div>
+        </div>
+        <form id="setup_form">
+            <!-- content created dynamically -->
+        </form>
+        <button id="done" disabled>Done!</button>
+    </section>
+
+    <section class="game">
+        <div class="canvas_container">
+            <div>My troups</div>
+<!--            <canvas id="myTroups" width="451" height="451"></canvas>-->
+            <canvas id="myTroups" width="550" height="550"></canvas>
+        </div>
+        <div class="canvas_container">
+            <div>Battlefield</div>
+            <canvas id="battlefield" width="550" height="550"></canvas>
+        </div>
+    </section>
+
+    <footer>
+        <!--Algorithm is written by the help from: http://www.datagenetics.com/blog/december32011/-->
+    </footer>
+</body>
+</html>

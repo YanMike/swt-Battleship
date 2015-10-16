@@ -1,0 +1,82 @@
+/* general */
+section {
+  width: 600px;
+  margin: 0 auto;
+}
+/* *** */
+/* instructions */
+section.instruction button#start_setup {
+  float: right;
+  margin-top: 30px;
+}
+/* *** */
+/* setup */
+section.setup {
+  display: none;
+  position: relative;
+}
+section.setup .description {
+  position: absolute;
+  left: 0;
+  width: 340px;
+}
+section.setup form#setup_form {
+  position: absolute;
+  right: 0;
+  width: 240px;
+}
+section.setup form#setup_form fieldset {
+  margin-bottom: 10px;
+}
+section.setup form#setup_form fieldset .group_start,
+section.setup form#setup_form fieldset .group_dir {
+  display: block;
+  margin-top: 10px;
+}
+section.setup form#setup_form fieldset .group_start div,
+section.setup form#setup_form fieldset .group_dir div,
+section.setup form#setup_form fieldset .group_start select,
+section.setup form#setup_form fieldset .group_dir select {
+  display: inline-block;
+}
+section.setup form#setup_form fieldset .group_start select,
+section.setup form#setup_form fieldset .group_dir select {
+  width: 44px;
+}
+section.setup form#setup_form fieldset .group_start select:first-of-type {
+  margin-left: 10px;
+}
+section.setup form#setup_form fieldset .group_start select:last-of-type {
+  margin-left: 26px;
+}
+section.setup form#setup_form fieldset .group_dir div {
+  display: block;
+}
+section.setup form#setup_form fieldset .group_dir label:first-of-type {
+  margin-right: 15px;
+}
+section.setup form#setup_form fieldset .group_dir input {
+  margin-right: 10px;
+}
+section.setup button#done {
+  position: absolute;
+  top: 500px;
+  left: 0px;
+}
+/* *** */
+/* battlefield */
+section.game {
+  display: none;
+  width: 1250px;
+}
+section.game .canvas_container {
+  display: inline-block;
+  width: 600px;
+}
+section.game .canvas_container :first-of-type {
+  margin-right: 25px;
+}
+section.game .canvas_container :last-of-type {
+  margin-left: 25px;
+}
+/* *** */
