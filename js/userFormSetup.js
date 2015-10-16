@@ -101,7 +101,7 @@ var userSetup = function() {
 
         // after code generation, check value changes
         $('select, input[type="radio"]').change(function() {
-            onTheFlyValidation($(this));
+            checkPositionRules($(this));
         });
     }
 
@@ -115,10 +115,15 @@ var userSetup = function() {
             ships[ship].start.push($vtS);
             ships[ship].dir = $dir;
         }
-        checkPositionRules();
+        setupBattlefield(ships);
     }
 
-    function onTheFlyValidation(input) {
+    /**
+     * on the fly check, if user's input is compliant to rules
+     * @param input
+     */
+    function checkPositionRules(input) {
+        console.log('calcoccupied');
         var $name = input.parents('fieldset').attr('class'),
             $ship = ships[$name],
             $occ  = $ship.occupied;
@@ -136,20 +141,24 @@ var userSetup = function() {
 
         if($ship.dir !== '' && $occ.length >= 2) {
             // get all fields, which are touched by the ship
-            calcOccupied($name);
-
-
-            // compare, if any field is already touched by another ship
-            var result = compareOccupied();
-            if( result == false ) {
+            var result = calcOccupied($name);
+            if(!result) {
                 $('#' + $name + '_hz').prop('selectedIndex', 0);
                 $('#' + $name + '_vt').prop('selectedIndex', 0);
-                ships[$name].occupied = [];
-                console.log(ships[$name].occupied);
-                alert('This entry is not allowed. Ships are overlapping. Please check on your last input!');
-                result = true;
-            } else if(result == "done") {
-                $('button#done').prop('disabled', false);
+                alert('This entry is not allowed. Ship is not inside the grid anymore!');
+                return;
+            } else {
+                // compare, if any field is already touched by another ship
+                result = compareOccupied();
+                if( result == false ) {
+                    $('#' + $name + '_hz').prop('selectedIndex', 0);
+                    $('#' + $name + '_vt').prop('selectedIndex', 0);
+                    ships[$name].occupied = [];
+                    alert('This entry is not allowed. Ships are overlapping. Please check on your last input!');
+                    result = true;
+                } else if(result == "done") {
+                    $('button#done').prop('disabled', false);
+                }
             }
         }
     }
@@ -167,6 +176,7 @@ var userSetup = function() {
         if($ship.dir == 'hz') {
             for(var x = 0; x < $ship.length; x++) {
                 n = x + parseInt($occ[0]);
+                if(n > 10) return false;
                 $tmp.push(n + $occ[1]);
             }
         } else if($ship.dir == 'vt') {
@@ -174,6 +184,10 @@ var userSetup = function() {
             $tmp.push($occ[0] + c);
             for(var x = 0; x < ($ship.length-1); x++) {
                 c = nextChar(c);
+                if(c > 'J') {
+                    console.log('>J');
+                    return false;
+                }
                 $tmp.push($occ[0] + c);
             }
         }
@@ -181,6 +195,7 @@ var userSetup = function() {
         for(var x = 0; x < $tmp.length; x++) {
             $ship.occupied.push($tmp[x]);
         }
+        return true;
     }
 
     /**
@@ -189,7 +204,7 @@ var userSetup = function() {
     function compareOccupied() {
         var $tmp = [],
             r = true;
-        for(var name in ships) {
+        for (var name in ships) {
             $tmp.push(ships[name].occupied)
         }
 
@@ -197,7 +212,7 @@ var userSetup = function() {
 
 
         var $sorted_con = $con.sort(); // You can define the comparing function here.
-                                     // JS by default uses a crappy string compare.
+        // JS by default uses a crappy string compare.
         for (var i = 0; i < $con.length - 1; i++) {
             if ($sorted_con[i + 1] == $sorted_con[i]) {
                 r = false;
@@ -205,29 +220,18 @@ var userSetup = function() {
             }
         }
         /*for(var x = 0; x < $con.length; x++) {
-            for(var i = 0; i < $con.length; i++) {
-                if( ($con[x] == $con[i]) && (x != i) ) {
-                    r = false;
-                    return r;
-                }
-            }
-        }*/
+         for(var i = 0; i < $con.length; i++) {
+         if( ($con[x] == $con[i]) && (x != i) ) {
+         r = false;
+         return r;
+         }
+         }
+         }*/
 
-        if($con.length == 17) {
+        if ($con.length == 17) {
             return r = "done";
         }
         return r;
-    }
-
-    /**
-     * check if user's input is compliant to rules
-     */
-    function checkPositionRules(){
-        if(true) {
-            setupBattlefield(ships);
-        } else {
-            console.log('TODO: checkPositionRules()');
-        }
     }
 
     // Interface
