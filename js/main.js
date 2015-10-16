@@ -1,6 +1,7 @@
 /**
  * Created by yannick on 09.10.15.
  */
+
 "use strict";
 
 $(document).ready(function() {
@@ -11,17 +12,12 @@ $(document).ready(function() {
         userSetup().startSetup();
     });
 
-
     $('button#done').click(function() {
         var ready = false;
-        // proofe user input - everything there?
+
+        // check if user's input is completed
         $('select').each(function() {
             ready = $(this).find('option:selected').val() != '';
-            //if( $(this).find('option:selected').val() == '') {
-            //    ready = false;
-            //} else {
-            //    ready = true;
-            //}
         });
 
         if(ready) {
@@ -29,19 +25,13 @@ $(document).ready(function() {
             $('section.game').show();
             userSetup().getPosition();
         } else {
-            alert('Please define a start position for any ship!');
+            alert('Please define a start position for all ships!');
         }
-
     });
+
 });
 
 
-/*
- *  helper function to increment letters
- */
-function nextChar(c) {
-    return String.fromCharCode(c.charCodeAt(0) + 1);
-}
 
 
 /*

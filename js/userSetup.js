@@ -3,6 +3,7 @@
  */
 
 var userSetup = function() {
+
     var ships = {
         'aircraftCarrier': {
             'length': 5,
@@ -41,7 +42,8 @@ var userSetup = function() {
         }
     };
 
-    /*
+
+    /**
      *
      */
     function startSetup() {
@@ -66,12 +68,12 @@ var userSetup = function() {
             // create the options 1-10 resp. A-J
             for(var x = 0; x <= 10; x++) {
                 if(x == 0) {
-                    $hz.append($('<option disabled selected>').attr('value', '0').text(''));
-                    $vt.append($('<option disabled selected>').attr('value', '0').text(''));
+                    //$hz.append($('<option disabled selected>').attr('value', '0').text(''));
+                    //$vt.append($('<option disabled selected>').attr('value', '0').text(''));
                 } else {
                     $hz.append($('<option>').attr('value', x).text(x));
                     $vt.append($('<option>').attr('value', c).text(c));
-                    c = nextChar(c);
+                    c = helpers().nextChar(c);
                 }
             }
 
@@ -105,6 +107,10 @@ var userSetup = function() {
         });
     }
 
+
+    /**
+     *
+     */
     function getPosition() {
         for(var ship in ships) {
             var $hzS = $('select#' + ship + '_hz').val();
@@ -118,12 +124,12 @@ var userSetup = function() {
         setupBattlefield(ships);
     }
 
+
     /**
      * on the fly check, if user's input is compliant to rules
      * @param input
      */
     function checkPositionRules(input) {
-        console.log('calcoccupied');
         var $name = input.parents('fieldset').attr('class'),
             $ship = ships[$name],
             $occ  = $ship.occupied;
@@ -163,6 +169,7 @@ var userSetup = function() {
         }
     }
 
+
     /**
      *
      * @param $name : ship's name to get access to obj.ships
@@ -183,7 +190,7 @@ var userSetup = function() {
             var c = $occ[1];
             $tmp.push($occ[0] + c);
             for(var x = 0; x < ($ship.length-1); x++) {
-                c = nextChar(c);
+                c = helpers().nextChar(c);
                 if(c > 'J') {
                     console.log('>J');
                     return false;
@@ -197,6 +204,7 @@ var userSetup = function() {
         }
         return true;
     }
+
 
     /**
      *
