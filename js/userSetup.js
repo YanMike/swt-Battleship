@@ -48,57 +48,62 @@ var userSetup = function() {
      */
     function startSetup() {
         for(var ship in ships) {
-            var c = 'A';
+            if(ships.hasOwnProperty(ship)) {
+                var c = 'A';
 
-            // create HTML form
-            var $fd  =  $('<fieldset class="' + ship + '">').appendTo('#setup_form');
-                        $('<legend>').appendTo($fd);
+                // create HTML form
+                var $fd  =  $('<fieldset class="' + ship + '">').appendTo('#setup_form');
+                $('<legend>').appendTo($fd);
 
-            var $gr1 =  $('<div class="group_start">').appendTo('.' + ship);
-                        $('<div>Start - Horizontal:</div>').appendTo($gr1);
-            var $hz =   $('<select id="' + ship + '_hz">').appendTo($gr1).attr('name', 'start_hz');
-                        $('<div>Start - Vertical:</div>').appendTo($gr1);
-            var $vt =   $('<select id="' + ship + '_vt">').appendTo($gr1).attr('name', 'start_vt');
+                var $gr1 =  $('<div class="group_start">').appendTo('.' + ship);
+                $('<div>Start - Horizontal:</div>').appendTo($gr1);
+                var $hz =   $('<select id="' + ship + '_hz">').appendTo($gr1).attr('name', 'start_hz');
+                $('<div>Start - Vertical:</div>').appendTo($gr1);
+                var $vt =   $('<select id="' + ship + '_vt">').appendTo($gr1).attr('name', 'start_vt');
 
-            var $gr2 =  $('<div class="group_dir">').appendTo('.' + ship);
-                        $('<div>Direction:</div>').appendTo($gr2);
-            var $dirhz = $('<label><input type="radio" name="direction_'+ ship +'" value="hz">').appendTo($gr2);
-            var $dirvt = $('<label><input type="radio" name="direction_'+ ship +'" value="vt">').appendTo($gr2);
+                var $gr2 =  $('<div class="group_dir">').appendTo('.' + ship);
+                $('<div>Direction:</div>').appendTo($gr2);
+                var $dirhz = $('<label><input type="radio" name="direction_'+ ship +'" value="hz">').appendTo($gr2);
+                var $dirvt = $('<label><input type="radio" name="direction_'+ ship +'" value="vt">').appendTo($gr2);
 
-            // create the options 1-10 resp. A-J
-            for(var x = 0; x <= 10; x++) {
-                if(x == 0) {
-                    //$hz.append($('<option disabled selected>').attr('value', '0').text(''));
-                    //$vt.append($('<option disabled selected>').attr('value', '0').text(''));
-                } else {
-                    $hz.append($('<option>').attr('value', x).text(x));
-                    $vt.append($('<option>').attr('value', c).text(c));
-                    c = helpers().nextChar(c);
+                // create the options 1-10 resp. A-J
+                for(var x = 0; x <= 10; x++) {
+                    if(x == 0) {
+                        //$hz.append($('<option disabled selected>').attr('value', '0').text(''));
+                        //$vt.append($('<option disabled selected>').attr('value', '0').text(''));
+                    } else {
+                        $hz.append($('<option>').attr('value', x).text(x));
+                        $vt.append($('<option>').attr('value', c).text(c));
+                        c = helpers().nextChar(c);
+                    }
                 }
-            }
 
-            // add html to legend
-            switch(ship) {
-                case 'aircraftCarrier':
-                    $('.' + ship + ' legend').append(ships.aircraftCarrier.legend);
-                    break;
-                case 'battleship':
-                    $('.' + ship + ' legend').append(ships.battleship.legend);
-                    break;
-                case 'submarine':
-                    $('.' + ship + ' legend').append(ships.submarine.legend);
-                    break;
-                case 'destroyer':
-                    $('.' + ship + ' legend').append(ships.destroyer.legend);
-                    break;
-                case 'patrolBoat':
-                    $('.' + ship + ' legend').append(ships.patrolBoat.legend);
-                    break;
-            }
+                // add html to legend
+                switch(ship) {
+                    case 'aircraftCarrier':
+                        $('.' + ship + ' legend').append(ships.aircraftCarrier.legend);
+                        break;
+                    case 'battleship':
+                        $('.' + ship + ' legend').append(ships.battleship.legend);
+                        break;
+                    case 'submarine':
+                        $('.' + ship + ' legend').append(ships.submarine.legend);
+                        break;
+                    case 'destroyer':
+                        $('.' + ship + ' legend').append(ships.destroyer.legend);
+                        break;
+                    case 'patrolBoat':
+                        $('.' + ship + ' legend').append(ships.patrolBoat.legend);
+                        break;
+                    default:
+                        console.log('Error occured');
+                        break;
+                }
 
-            // add html to radio buttons
-            $dirhz.append('horizontal');
-            $dirvt.append('vertical');
+                // add html to radio buttons
+                $dirhz.append('horizontal');
+                $dirvt.append('vertical');
+            }
         }
 
         // after code generation, check value changes
@@ -156,7 +161,7 @@ var userSetup = function() {
             } else {
                 // compare, if any field is already touched by another ship
                 result = compareOccupied();
-                if( result == false ) {
+                if( !result ) {
                     $('#' + $name + '_hz').prop('selectedIndex', 0);
                     $('#' + $name + '_vt').prop('selectedIndex', 0);
                     ships[$name].occupied = [];
@@ -183,7 +188,8 @@ var userSetup = function() {
         if($ship.dir == 'hz') {
             for(var x = 0; x < $ship.length; x++) {
                 n = x + parseInt($occ[0]);
-                if(n > 10) return false;
+                if(n > 10)
+                    return false;
                 $tmp.push(n + $occ[1]);
             }
         } else if($ship.dir == 'vt') {
@@ -213,14 +219,16 @@ var userSetup = function() {
         var $tmp = [],
             r = true;
         for (var name in ships) {
-            $tmp.push(ships[name].occupied)
+            if(ships.hasOwnProperty(name)){
+                $tmp.push(ships[name].occupied);
+            }
         }
 
         var $con = $tmp[0].concat($tmp[1], $tmp[2], $tmp[3], $tmp[4]);
 
 
-        var $sorted_con = $con.sort(); // You can define the comparing function here.
-        // JS by default uses a crappy string compare.
+        var $sorted_con = $con.sort();
+
         for (var i = 0; i < $con.length - 1; i++) {
             if ($sorted_con[i + 1] == $sorted_con[i]) {
                 r = false;

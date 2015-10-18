@@ -16,21 +16,14 @@ var setupBattlefield = function (shipsObj) {
 
     setUserShipsPositions(ctxTroups);
 
+    $('.user-info').show();
 
     /**
      * EventListener to detect user's shots
      */
     battlefield.addEventListener('click', function (evt) {
-        gameLogic().detectShot(evt);
+        gameLogic().detectShot(evt, ctxBattlefield);
     });
-
-
-    /**
-     *  highlight shots at the battlefield
-     */
-    function drawShots() {
-        // TODO
-    }
 
 
     /**
@@ -38,44 +31,49 @@ var setupBattlefield = function (shipsObj) {
      */
     function setUserShipsPositions(context) {
         for (var ship in ships) {
-            var $pos = [],
-                $length = 0,
-                $dir;
+            if(ships.hasOwnProperty(ship)) {
+                var $pos = [],
+                    $length = 0,
+                    $dir;
 
-            switch (ship) {
-                case 'aircraftCarrier':
-                    $pos.push(ships.aircraftCarrier.start[0]);
-                    $pos.push(ships.aircraftCarrier.start[1]);
-                    $dir = ships.aircraftCarrier.dir;
-                    $length = ships.aircraftCarrier.length;
-                    break;
-                case 'battleship':
-                    $pos.push(ships.battleship.start[0]);
-                    $pos.push(ships.battleship.start[1]);
-                    $dir = ships.battleship.dir;
-                    $length = ships.battleship.length;
-                    break;
-                case 'submarine':
-                    $pos.push(ships.submarine.start[0]);
-                    $pos.push(ships.submarine.start[1]);
-                    $dir = ships.submarine.dir;
-                    $length = ships.submarine.length;
-                    break;
-                case 'destroyer':
-                    $pos.push(ships.destroyer.start[0]);
-                    $pos.push(ships.destroyer.start[1]);
-                    $dir = ships.destroyer.dir;
-                    $length = ships.destroyer.length;
-                    break;
-                case 'patrolBoat':
-                    $pos.push(ships.patrolBoat.start[0]);
-                    $pos.push(ships.patrolBoat.start[1]);
-                    $dir = ships.patrolBoat.dir;
-                    $length = ships.patrolBoat.length;
-                    break;
+                switch (ship) {
+                    case 'aircraftCarrier':
+                        $pos.push(ships.aircraftCarrier.start[0]);
+                        $pos.push(ships.aircraftCarrier.start[1]);
+                        $dir = ships.aircraftCarrier.dir;
+                        $length = ships.aircraftCarrier.length;
+                        break;
+                    case 'battleship':
+                        $pos.push(ships.battleship.start[0]);
+                        $pos.push(ships.battleship.start[1]);
+                        $dir = ships.battleship.dir;
+                        $length = ships.battleship.length;
+                        break;
+                    case 'submarine':
+                        $pos.push(ships.submarine.start[0]);
+                        $pos.push(ships.submarine.start[1]);
+                        $dir = ships.submarine.dir;
+                        $length = ships.submarine.length;
+                        break;
+                    case 'destroyer':
+                        $pos.push(ships.destroyer.start[0]);
+                        $pos.push(ships.destroyer.start[1]);
+                        $dir = ships.destroyer.dir;
+                        $length = ships.destroyer.length;
+                        break;
+                    case 'patrolBoat':
+                        $pos.push(ships.patrolBoat.start[0]);
+                        $pos.push(ships.patrolBoat.start[1]);
+                        $dir = ships.patrolBoat.dir;
+                        $length = ships.patrolBoat.length;
+                        break;
+                    default:
+                        console.log('Error occured');
+                        break;
+                }
+
+                drawUsersShips(context, $pos, $dir, $length);
             }
-
-            drawUsersShips(context, $pos, $dir, $length);
         }
     }
 
@@ -85,12 +83,15 @@ var setupBattlefield = function (shipsObj) {
      *  draws both grids - battlefield & user's troup
      */
     function drawGrid(context, size) {
+        var x = 0,
+            t = 0,
+            y = 0;
         // grid generation
-        for (var x = 0; x < (size + 2); x += (size / 11)) {
+        for (x = 0; x < (size + 2); x += (size / 11)) {
             context.moveTo(x, 0);
             context.lineTo(x, size);
         }
-        for (var y = 0; y < (size + 2); y += (size / 11)) {
+        for (y = 0; y < (size + 2); y += (size / 11)) {
             context.moveTo(0, y);
             context.lineTo(size, y);
         }
@@ -119,7 +120,7 @@ var setupBattlefield = function (shipsObj) {
 
         // set A-J on canvas (column 1)
         var c = 'A';
-        for (var t = 0, x = posx, y = letterY; t < 10; t++, y += (size / 11)) {
+        for (t = 0, x = posx, y = letterY; t < 10; t++, y += (size / 11)) {
             if (c != 'I') {
                 context.fillText(c, x, y);
             } else {
@@ -129,7 +130,7 @@ var setupBattlefield = function (shipsObj) {
         }
 
         // set 1-10 on canvas (row 1)
-        for (var t = 1, x = numberX, y = numberY; t <= 10; t++, x += (size / 11)) {
+        for (t = 1, x = numberX, y = numberY; t <= 10; t++, x += (size / 11)) {
             if (t == 10) {
                 context.fillText(t, posx + x - 7, y);
                 break;

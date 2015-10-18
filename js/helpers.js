@@ -108,6 +108,9 @@ var helpers = function() {
             case 'J':
                 pos = "10";
                 break;
+            default:
+                console.log('Error occured');
+                break;
         }
         return pos;
     }
@@ -117,5 +120,5 @@ var helpers = function() {
         translate:translate,
         transToString:transCharToInt,
         nextChar:nextChar
-    }
+    };
 };

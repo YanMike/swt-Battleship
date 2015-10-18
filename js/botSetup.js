@@ -48,6 +48,20 @@ var botSetup = function() {
         }
     };
 
+    var botOccs = ["2B", "2C", "2D", "2E", "2F","5C", "6C", "7C", "8C","8F", "8G", "8H","4I", "5I", "6I","7A", "8A"];
+
+
+    function strikeOrNotIsHereTheQuestion(coord) {
+        if($.inArray(coord, botOccs) >= 0) {
+            console.log(coord + ' found');
+            return true;
+        } else {
+            console.log('not found');
+            return false;
+        }
+    }
+
+
     // function generateShipPositions() {}
 
     /* TODO 2
@@ -58,6 +72,10 @@ var botSetup = function() {
      // 4) trigger user to make next shot
      */
 
+    // Interface
+    return {
+        strikeOrNotIsHereTheQuestion:strikeOrNotIsHereTheQuestion
+    };
 };
 
 
