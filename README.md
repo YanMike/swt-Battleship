@@ -13,10 +13,10 @@ This game is just a prototyp. There is still a list of known bugs.
 * user: list of ships which shows availability/ damages
 
 * use of image for user's ships
-
+* simulate pause between user's shot and bot's shot 
 
 ### Known Bugs
-
+* user setup is complicated. If user enters a already occupied position, it can happen that user gets an error all the time -> refresh page 
 
 
 
