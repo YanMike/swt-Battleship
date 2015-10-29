@@ -3,7 +3,6 @@
  */
 
 var userSetup = function() {
-
     var ships = {
         'aircraftCarrier': {
             'length': 5,
@@ -69,6 +68,7 @@ var userSetup = function() {
                 // create the options 1-10 resp. A-J
                 for(var x = 0; x <= 10; x++) {
                     if(x == 0) {
+                        /*FOR DEV ONLY - REMOVE COMMENTS FOR LIVE !!*/
                         //$hz.append($('<option disabled selected>').attr('value', '0').text(''));
                         //$vt.append($('<option disabled selected>').attr('value', '0').text(''));
                     } else {
@@ -226,7 +226,6 @@ var userSetup = function() {
 
         var $con = $tmp[0].concat($tmp[1], $tmp[2], $tmp[3], $tmp[4]);
 
-
         var $sorted_con = $con.sort();
 
         for (var i = 0; i < $con.length - 1; i++) {
@@ -245,6 +244,7 @@ var userSetup = function() {
          }*/
 
         if ($con.length == 17) {
+            gamePlay.usersOccs = $tmp[0].concat($tmp[1], $tmp[2], $tmp[3], $tmp[4]);
             return r = "done";
         }
         return r;

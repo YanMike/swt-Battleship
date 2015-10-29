@@ -115,10 +115,54 @@ var helpers = function() {
         return pos;
     }
 
+    /**
+     * change from number to char
+     * @param pos
+     */
+    function transIntToChar(pos) {
+        switch (pos) {
+            case 1:
+                pos = "A";
+                break;
+            case 2:
+                pos = "B";
+                break;
+            case 3:
+                pos = "C";
+                break;
+            case 4:
+                pos = "D";
+                break;
+            case 5:
+                pos = "E";
+                break;
+            case 6:
+                pos = "F";
+                break;
+            case 7:
+                pos = "G";
+                break;
+            case 8:
+                pos = "H";
+                break;
+            case 9:
+                pos = "I";
+                break;
+            case 10:
+                pos = "J";
+                break;
+            default:
+                console.log('Error occured');
+                break;
+        }
+        return pos;
+    }
+
     // Interface
     return {
         translate:translate,
-        transToString:transCharToInt,
+        transCharToInt:transCharToInt,
+        transIntToChar:transIntToChar,
         nextChar:nextChar
     };
 };

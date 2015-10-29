@@ -5,7 +5,6 @@
 "use strict";
 
 $(document).ready(function() {
-
     $('button#start_setup').click(function() {
         $('section.instruction').hide();
         $('section.setup').show();
@@ -18,6 +17,7 @@ $(document).ready(function() {
         // check if user's input is completed
         $('select').each(function() {
             ready = $(this).find('option:selected').val() != '';
+            ready = true;
         });
 
         if(ready) {
@@ -28,7 +28,6 @@ $(document).ready(function() {
             alert('Please define a start position for all ships!');
         }
     });
-
 });
 
 

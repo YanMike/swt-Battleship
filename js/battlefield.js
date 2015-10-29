@@ -1,6 +1,7 @@
 /**
  * Created by yannick on 09.10.15.
  */
+var $counter = 0;
 
 var setupBattlefield = function (shipsObj) {
     var ships = shipsObj;
@@ -15,6 +16,8 @@ var setupBattlefield = function (shipsObj) {
     drawGrid(ctxTroups, 550);
 
     setUserShipsPositions(ctxTroups);
+    // TODO: start algorithm to set bot ships
+    bot().init();
 
     $('.user-info').show();
 
@@ -22,7 +25,15 @@ var setupBattlefield = function (shipsObj) {
      * EventListener to detect user's shots
      */
     battlefield.addEventListener('click', function (evt) {
-        gameLogic().detectShot(evt, ctxBattlefield);
+        if(gamePlay.isUsersTurn) {
+            console.log('############################################');
+            $counter++;
+            console.log($counter);
+            gameLogic().detectShot(evt, ctxBattlefield, ctxTroups);
+        } else {
+            console.log("error, not user's turn");
+        }
+
     });
 
 
@@ -152,7 +163,7 @@ var setupBattlefield = function (shipsObj) {
      * @param length
      */
     function drawUsersShips(context, pos, dir, length) {
-        pos[1] = helpers().transToString(pos[1]);
+        pos[1] = helpers().transCharToInt(pos[1]);
         var start = helpers().translate(pos);
 
         context.fillStyle = 'black';
