@@ -12,7 +12,7 @@ var gamePlay = {
 
 var gameLogic = function() {
 
-    /**
+     /**
      *  get (and evaluate) user click on battlefield.
      */
     function detectShot(evt, ctxBf, ctxTr) {
@@ -20,8 +20,6 @@ var gameLogic = function() {
         var field = battlefield.getBoundingClientRect();
         var $hz = evt.clientX - field.left;
         var $vt = evt.clientY - field.top;
-
-        $('.user-turn').hide();
 
         $hz = helpers().translate($hz);
         $vt = helpers().translate($vt);
@@ -65,17 +63,12 @@ var gameLogic = function() {
     function strikeOrNotIsHereTheQuestion(coord) {
         if(gamePlay.isUsersTurn) {
             var arr = gamePlay.botOccs;
-            console.log('search in botOccs  ' + gamePlay.usersOccs);
         } else {
-            console.log('serach in usersOccs  ' + gamePlay.botOccs);
             var arr = gamePlay.usersOccs;
         }
-        console.log(coord);
         if($.inArray(coord, arr) > -1) {
-            console.log(coord + ' found');
             return true;
         } else {
-            console.log('not found');
             return false;
         }
     }
@@ -100,11 +93,9 @@ var gameLogic = function() {
         context.fillRect(start.x1, start.y1, 49, 49);
 
         if(player === "user") {
-            console.log('last shot: user; next shot: bot');
             gamePlay.isUsersTurn = false;
         } else if(player === "bot") {
             gamePlay.isUsersTurn = true;
-            console.log('last shot: bot; next shot: user');
         }
     }
 

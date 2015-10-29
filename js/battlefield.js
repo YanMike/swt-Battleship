@@ -1,7 +1,6 @@
 /**
  * Created by yannick on 09.10.15.
  */
-var $counter = 0;
 
 var setupBattlefield = function (shipsObj) {
     var ships = shipsObj;
@@ -26,9 +25,6 @@ var setupBattlefield = function (shipsObj) {
      */
     battlefield.addEventListener('click', function (evt) {
         if(gamePlay.isUsersTurn) {
-            console.log('############################################');
-            $counter++;
-            console.log($counter);
             gameLogic().detectShot(evt, ctxBattlefield, ctxTroups);
         } else {
             console.log("error, not user's turn");

@@ -61,7 +61,6 @@ section.setup form#setup_form fieldset .group_dir input {
 section.setup button#done {
   position: absolute;
   top: 500px;
-  left: 0px;
 }
 /* *** */
 /* battlefield */
@@ -77,6 +76,9 @@ section.game .canvas_container :first-of-type {
   margin-right: 25px;
 }
 section.game .canvas_container :last-of-type {
+  margin-left: 25px;
+}
+section.game h3 {
   margin-left: 25px;
 }
 /* *** */

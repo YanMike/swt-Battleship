@@ -1,7 +1,6 @@
 /**
  * Created by yannick on 16.10.15.
  */
-
 var bot = function() {
 
     // TODO: make positioning is random
@@ -71,6 +70,7 @@ var bot = function() {
      *
      */
     function play(ctx) {
+
         //console.log('botOccs: ' + gamePlay.botOccs);
         var $shot = randomShot();
         var $tmp = '' + $shot[0] + $shot[1];
@@ -84,38 +84,36 @@ var bot = function() {
      */
     function randomShot() {
         var $hz,
-            $vt;
+            $vt,
+            $tmp = '';
 
         do {
-            console.log($hz);
             $hz = Math.ceil(Math.random() * 10);
             if($hz == 0) {
                 $hz = 1;
             }
-            console.log('$vz in Array: ');
-            console.log($.inArray($hz, gamePlay.botShots));
-        } while($.inArray($hz, gamePlay.botShots) > -1);
 
-        do {
-            console.log($vt);
             $vt = Math.ceil(Math.random() * 10);
             if($vt == 0) {
                 $vt = 1;
             }
-            console.log('$vt in Array: ');
-            console.log($.inArray($vt, gamePlay.botShots));
-        } while($.inArray($vt, gamePlay.botShots) > -1);
-        console.log('randomShot done');
+            $vt = helpers().transIntToChar($vt);
 
-        $vt = helpers().transIntToChar($vt);
+            $tmp = '' + $hz + $vt;
+        } while($.inArray($tmp, gamePlay.botShots) > -1);
 
-        var $pos = [$hz, $vt];
-        gamePlay.botShots.push('' + $hz + $vt);
+
+        gamePlay.botShots.push($tmp);
+        gamePlay.botShots.sort();
+
+
+
         /*
         console.log('botShots: ' + gamePlay.botShots);
         gamePlay.botShots.sort();
          */
 
+        var $pos = [$hz, $vt];
         return $pos;
     }
 
