@@ -18,5 +18,4 @@ There is still a list of known bugs.
 ### Known Bugs
 * user setup is complicated. If user enters a already occupied position, it can happen that user gets an error all the time -> refresh page 
 
-
-
+###### Last Update: 2015-11-01
