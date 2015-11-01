@@ -1,7 +1,14 @@
 /**
- * Created by yannick on 16.10.15.
+ * gameLogic
+ *  - detects shot
+ *  - draw shots on grid
+ *  - call bot to play
  */
 
+/**
+ * global storage for savegame
+ * @type {{userShots: Array, botShots: Array, isUsersTurn: boolean, botOccs: Array, usersOccs: Array}}
+ */
 var gamePlay = {
     'userShots': [],
     'botShots': [],
@@ -12,14 +19,19 @@ var gamePlay = {
 
 var gameLogic = function() {
 
-     /**
-     *  get (and evaluate) user click on battlefield.
+    /**
+     * get (and evaluate) user click on battlefield
+     * @param evt
+     * @param ctxBf
+     * @param ctxTr
      */
     function detectShot(evt, ctxBf, ctxTr) {
         var c = "@";
         var field = battlefield.getBoundingClientRect();
         var $hz = evt.clientX - field.left;
         var $vt = evt.clientY - field.top;
+
+        $('.user-turn').hide();
 
         $hz = helpers().translate($hz);
         $vt = helpers().translate($vt);
@@ -41,22 +53,18 @@ var gameLogic = function() {
             alert('Already clicked. Choose other field.');
         }
 
-
-
-        /* TODO 1
-         // 1) strikeOrNotIsHereTheQuestion($hz, $vt);
-         // 2) check if ship was sunk
-         // 3) draw result
-         // 4) trigger bot shooting
-         // ... bot
-         // come back
+        /* Step 1
+         *   1) strikeOrNotIsHereTheQuestion($hz, $vt);
+         *   2) check if ship was sunk
+         *   3) draw result
+         *   4) trigger bot shooting
+         *   ... bot
+         *   come back
          */
-
-
     }
 
     /**
-     *
+     * check if shot is a strike or not
      * @param coord
      * @returns {boolean}
      */
@@ -74,7 +82,11 @@ var gameLogic = function() {
     }
 
     /**
-     *  highlight shots on the battlefield
+     * highlight shots on the battlefield
+     * @param isStrike
+     * @param shot
+     * @param context
+     * @param player
      */
     function drawShots(isStrike, shot, context, player) {
         var pos = [];

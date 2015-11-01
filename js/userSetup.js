@@ -1,5 +1,7 @@
 /**
- * Created by yannick on 13.10.15.
+ * userSetup:
+ *  - sets html select input fields
+ *  - checks user's input to be compliant to the rules
  */
 
 var userSetup = function() {
@@ -43,7 +45,8 @@ var userSetup = function() {
 
 
     /**
-     *
+     * set html select input fields
+     * detect changes made by the user
      */
     function startSetup() {
         for(var ship in ships) {
@@ -68,9 +71,8 @@ var userSetup = function() {
                 // create the options 1-10 resp. A-J
                 for(var x = 0; x <= 10; x++) {
                     if(x == 0) {
-                        /*FOR DEV ONLY - REMOVE COMMENTS FOR LIVE !!*/
-                        //$hz.append($('<option disabled selected>').attr('value', '0').text(''));
-                        //$vt.append($('<option disabled selected>').attr('value', '0').text(''));
+                        $hz.append($('<option disabled selected>').attr('value', '0').text(''));
+                        $vt.append($('<option disabled selected>').attr('value', '0').text(''));
                     } else {
                         $hz.append($('<option>').attr('value', x).text(x));
                         $vt.append($('<option>').attr('value', c).text(c));
@@ -114,7 +116,7 @@ var userSetup = function() {
 
 
     /**
-     *
+     *  get user's input (raw format)
      */
     function getPosition() {
         for(var ship in ships) {
@@ -176,7 +178,7 @@ var userSetup = function() {
 
 
     /**
-     *
+     * calc fields occupied by user's ships and save them
      * @param $name : ship's name to get access to obj.ships
      */
     function calcOccupied($name) {
@@ -213,7 +215,7 @@ var userSetup = function() {
 
 
     /**
-     *
+     * compare saved fields from calcOccupied() to detect overlapping ships
      */
     function compareOccupied() {
         var $tmp = [],
@@ -234,14 +236,6 @@ var userSetup = function() {
                 return r;
             }
         }
-        /*for(var x = 0; x < $con.length; x++) {
-         for(var i = 0; i < $con.length; i++) {
-         if( ($con[x] == $con[i]) && (x != i) ) {
-         r = false;
-         return r;
-         }
-         }
-         }*/
 
         if ($con.length == 17) {
             gamePlay.usersOccs = $tmp[0].concat($tmp[1], $tmp[2], $tmp[3], $tmp[4]);

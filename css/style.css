@@ -20,6 +20,12 @@ section.setup .description {
   left: 0;
   width: 340px;
 }
+section.setup .description div.hint-2 {
+  margin-top: 20px;
+}
+section.setup .description div.level {
+  margin-top: 50px;
+}
 section.setup form#setup_form {
   position: absolute;
   right: 0;

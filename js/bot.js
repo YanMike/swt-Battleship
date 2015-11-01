@@ -1,8 +1,10 @@
 /**
- * Created by yannick on 16.10.15.
+ * bot
+ *  - prepare default setup
+ *  - control bot's actions
+ * @returns {{init: init, play: play}}
  */
 var bot = function() {
-
     // TODO: make positioning is random
     var botShips = {
         'aircraftCarrier': {
@@ -53,7 +55,8 @@ var bot = function() {
     };
 
     /**
-     *
+     * initializing bot's ships
+     * saving occupied field
      */
     function init() {
         var $tmp = [];
@@ -67,22 +70,21 @@ var bot = function() {
     }
 
     /**
-     *
+     * control bot's turn
+     * @param ctx
      */
     function play(ctx) {
-
-        //console.log('botOccs: ' + gamePlay.botOccs);
-        var $shot = randomShot();
+        var $shot = huntMode();
         var $tmp = '' + $shot[0] + $shot[1];
         var $isStrike = gameLogic().strikeOrNotIsHereTheQuestion($tmp);
-        //console.log('isStrike: ' + $isStrike);
+
         gameLogic().drawShots($isStrike, $tmp, ctx, "bot");
     }
 
     /**
-     *
+     * random shooting for easiest level of difficulty
      */
-    function randomShot() {
+    function huntMode() {
         var $hz,
             $vt,
             $tmp = '';
@@ -106,28 +108,83 @@ var bot = function() {
         gamePlay.botShots.push($tmp);
         gamePlay.botShots.sort();
 
-
-
-        /*
-        console.log('botShots: ' + gamePlay.botShots);
-        gamePlay.botShots.sort();
-         */
-
         var $pos = [$hz, $vt];
         return $pos;
     }
 
+    /**
+     * status: DEVELOPMENT is IN PROGRESS. NOT WORKING YET
+     * shooting algorithm for 2nd level of difficulty
 
+     *  strike == true  ? check4randomly : huntMode
+     *  next round: strike ? save1stStrike, checkNext : check4randomly(4--)
+     *  ... loop ...
+     *  checkNext == false ? backTo1stStrike, checkNextOtherSide
+     *  next round: strike ? checkNextOnThatSide : huntMode(ship sunk)
 
-    // function generateShipPositions() {}
-
-    /* TODO 2
-     * bot shooting gets triggered from gameLogic().detectShot()
-     // 1) strikeOrNotIsHereTheQuestion($hz, $vt);
-     // 2) check if user's ship was sunk
-     // 3) draw result
-     // 4) trigger user to make next shot
      */
+    function targetMode() {
+        var $shot = huntMode();
+    }
+
+    /**
+     * status: DEVELOPMENT is IN PROGRESS. NOT WORKING YET
+     */
+    function generateShipPositions() {
+        var $tmp = [];
+
+        // get random start and proof that position is inside grid
+        for (var name in botShips) {
+        console.log(' ####### ' + name);
+
+        var $ship = botShips[name];
+        do {
+            var $dir = Math.ceil(Math.random() * 2);
+        } while($dir == 0);
+
+        $dir == 1 ? $dir = 'hz' : $dir = 'vt';
+
+        console.log('dir: ' + $dir);
+
+        do {
+            var $hz = Math.ceil(Math.random() * 10);
+            if($dir === 'hz') {
+                var x = $hz + $ship.occupied;
+            }
+        } while ($hz == 0 || x > 10);
+
+        console.log('hz: ' + $hz);
+
+        do {
+            var $vt = Math.ceil(Math.random() * 10);
+            var $vtNo = $vt;
+            $vt = helpers().transIntToChar($vt);
+            if($dir === 'vt') {
+                var char = $vt;
+                for (var c = 0; c < ($ship.length - 1); c++) {
+                    char = helpers().nextChar(char);
+                }
+            }
+        } while ($vtNo == 0 || char > 'J');
+
+        console.log('vt: ' + $vt);
+
+        // get all occupied positions
+        if($dir == 'hz') {
+            for(var x = 0; x < ($ship.length); x++) {
+                var n = x + $hz;
+                $tmp.push(n + $vt);
+            }
+        } else {
+            var c = $vt;
+            for(var x = 0; x < ($ship.length-1); x++) {
+                c = helpers().nextChar(c);
+            }
+                $tmp.push($hz + 'c');
+            }
+        }
+        console.log($tmp);
+    }
 
     // Interface
     return {

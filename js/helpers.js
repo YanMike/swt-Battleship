@@ -1,5 +1,8 @@
 /**
- * Created by yannick on 16.10.15.
+ * helpers, contains function which are used multiple times
+ *  - parse from character to int and the other way round
+ *  - de-/increment characters
+ *  - translate to 'canvas understandable' coordinates
  */
 
 var helpers = function() {
@@ -48,6 +51,15 @@ var helpers = function() {
         return String.fromCharCode(c.charCodeAt(0) + 1);
     }
 
+    /**
+     * helper function to decrement letters
+     * @param c
+     * @returns {string}
+     */
+    function prevChar(c) {
+        return String.fromCharCode(c.charCodeAt(0) - 1);
+    }
+
 
     /**
      * 1-10 to px: param === Array -> 0-start horizontal, 1-start vertical, 2-end horizontal, 3-end vertical
@@ -66,7 +78,6 @@ var helpers = function() {
             };
         } else {
             // translate from px to 1-10
-            // TODO: define if x50/x00 is clicked
             return  Math.floor(param / 50);
         }
     }
@@ -163,6 +174,7 @@ var helpers = function() {
         translate:translate,
         transCharToInt:transCharToInt,
         transIntToChar:transIntToChar,
-        nextChar:nextChar
+        nextChar:nextChar,
+        prevChar:prevChar
     };
 };

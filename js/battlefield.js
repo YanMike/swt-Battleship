@@ -1,5 +1,10 @@
 /**
- * Created by yannick on 09.10.15.
+ * setupBattlefield
+ *      - draw canvas grids
+ *      - takes user's raw input
+ *      - translate them to coordinates
+ *      - draw user's ships to the canvas
+ *      - calls bot initialization function
  */
 
 var setupBattlefield = function (shipsObj) {
@@ -15,7 +20,6 @@ var setupBattlefield = function (shipsObj) {
     drawGrid(ctxTroups, 550);
 
     setUserShipsPositions(ctxTroups);
-    // TODO: start algorithm to set bot ships
     bot().init();
 
     $('.user-info').show();
@@ -29,12 +33,12 @@ var setupBattlefield = function (shipsObj) {
         } else {
             console.log("error, not user's turn");
         }
-
     });
 
 
     /**
-     *  convert user's input to coordinates, which can be drawn on canvas
+     * convert user's input to coordinates, which can be drawn on canvas
+     * @param context
      */
     function setUserShipsPositions(context) {
         for (var ship in ships) {
@@ -86,8 +90,10 @@ var setupBattlefield = function (shipsObj) {
 
 
     /**
-     *  draw at canvas element
-     *  draws both grids - battlefield & user's troup
+     * draw at canvas element
+     * draws both grids - battlefield & user's troups
+     * @param context
+     * @param size
      */
     function drawGrid(context, size) {
         var x = 0,
@@ -112,15 +118,6 @@ var setupBattlefield = function (shipsObj) {
             var adjust = 7;
             context.font = "30px Arial";
         }
-        //else if (size == 451) {
-        //    var letterX = 1;
-        //    var letterY = 67;
-        //    var numberX = 40;
-        //    var numberY = 26;
-        //    var posx = 5;
-        //    var adjust = 3;
-        //    context.font = "15px Arial";
-        //}
 
         // text-align of text
         posx += (size / 11 / 2) - 10;
