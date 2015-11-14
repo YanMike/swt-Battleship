@@ -29,12 +29,10 @@ var setupBattlefield = function (shipsObj) {
      */
     battlefield.addEventListener('click', function (evt) {
         if(gamePlay.isUsersTurn) {
+            $('.error.shot').removeClass('active');
             gameLogic().detectShot(evt, ctxBattlefield, ctxTroups);
-        } else {
-            console.log("error, not user's turn");
         }
     });
-
 
     /**
      * convert user's input to coordinates, which can be drawn on canvas
@@ -45,45 +43,46 @@ var setupBattlefield = function (shipsObj) {
             if(ships.hasOwnProperty(ship)) {
                 var $pos = [],
                     $length = 0,
-                    $dir;
+                    $direction;
 
                 switch (ship) {
                     case 'aircraftCarrier':
                         $pos.push(ships.aircraftCarrier.start[0]);
                         $pos.push(ships.aircraftCarrier.start[1]);
-                        $dir = ships.aircraftCarrier.dir;
+                        $direction = ships.aircraftCarrier.direction;
                         $length = ships.aircraftCarrier.length;
                         break;
                     case 'battleship':
                         $pos.push(ships.battleship.start[0]);
                         $pos.push(ships.battleship.start[1]);
-                        $dir = ships.battleship.dir;
+                        $direction = ships.battleship.direction;
                         $length = ships.battleship.length;
                         break;
                     case 'submarine':
                         $pos.push(ships.submarine.start[0]);
                         $pos.push(ships.submarine.start[1]);
-                        $dir = ships.submarine.dir;
+                        $direction = ships.submarine.direction;
                         $length = ships.submarine.length;
                         break;
                     case 'destroyer':
                         $pos.push(ships.destroyer.start[0]);
                         $pos.push(ships.destroyer.start[1]);
-                        $dir = ships.destroyer.dir;
+                        $direction = ships.destroyer.direction;
                         $length = ships.destroyer.length;
                         break;
                     case 'patrolBoat':
                         $pos.push(ships.patrolBoat.start[0]);
                         $pos.push(ships.patrolBoat.start[1]);
-                        $dir = ships.patrolBoat.dir;
+                        $direction = ships.patrolBoat.direction;
                         $length = ships.patrolBoat.length;
                         break;
                     default:
-                        console.log('Error occured');
+                        $('.error.shot').addClass('active');
+                        $('.error.shot').html('An error occurred while battlefield setup. If you cannot play anymore, please refresh page. I\'m sorry!');
                         break;
                 }
 
-                drawUsersShips(context, $pos, $dir, $length);
+                drawUsersShips(context, $pos, $direction, $length);
             }
         }
     }
@@ -96,9 +95,9 @@ var setupBattlefield = function (shipsObj) {
      * @param size
      */
     function drawGrid(context, size) {
-        var x = 0,
-            t = 0,
-            y = 0;
+        var x,
+            t,
+            y;
         // grid generation
         for (x = 0; x < (size + 2); x += (size / 11)) {
             context.moveTo(x, 0);
@@ -109,33 +108,30 @@ var setupBattlefield = function (shipsObj) {
             context.lineTo(size, y);
         }
 
-        if (size == 550) {
-            //var letterX = 0;
-            var letterY = 85;
-            var numberX = 50;
-            var numberY = 38;
-            var posx = 0;
-            var adjust = 7;
-            context.font = "30px Arial";
-        }
+        var letterY = 85,
+            numberX = 50,
+            numberY = 38,
+            posx = 0,
+            adjust = 7;
+        context.font = "30px Arial";
 
         // text-align of text
         posx += (size / 11 / 2) - 10;
 
         // set A-J on canvas (column 1)
-        var c = 'A';
+        var character = 'A';
         for (t = 0, x = posx, y = letterY; t < 10; t++, y += (size / 11)) {
-            if (c != 'I') {
-                context.fillText(c, x, y);
+            if (character !== 'I') {
+                context.fillText(character, x, y);
             } else {
-                context.fillText(c, x + adjust, y);
+                context.fillText(character, x + adjust, y);
             }
-            c = helpers().nextChar(c);
+            character = helpers().nextChar(character);
         }
 
         // set 1-10 on canvas (row 1)
         for (t = 1, x = numberX, y = numberY; t <= 10; t++, x += (size / 11)) {
-            if (t == 10) {
+            if (t === 10) {
                 context.fillText(t, posx + x - 7, y);
                 break;
             }
@@ -147,21 +143,20 @@ var setupBattlefield = function (shipsObj) {
         context.stroke();
     }
 
-
     /**
      * draw user's ships on canvas
      * @param context
      * @param pos
-     * @param dir
+     * @param direction
      * @param length
      */
-    function drawUsersShips(context, pos, dir, length) {
+    function drawUsersShips(context, pos, direction, length) {
         pos[1] = helpers().transCharToInt(pos[1]);
         var start = helpers().translate(pos);
 
         context.fillStyle = 'black';
 
-        if(dir == 'vt') {
+        if(direction === 'vt') {
             context.fillRect(start.x1, start.y1, 49, 49*length+length);
         } else {
             context.fillRect(start.x1, start.y1, 49*length+length, 49);

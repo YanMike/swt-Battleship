@@ -3,42 +3,41 @@
  *  - sets html select input fields
  *  - checks user's input to be compliant to the rules
  */
-
 var userSetup = function() {
     var ships = {
         'aircraftCarrier': {
             'length': 5,
             'legend': 'Aircraft Carrier',
             'start': [],
-            'dir': '',
+            "direction": '',
             'occupied': []
         },
         'battleship': {
             'length': 4,
             'legend': 'Battleship',
             'start': [],
-            'dir': '',
+            "direction": '',
             'occupied': []
         },
         'submarine': {
             'length': 3,
             'legend': 'Submarine',
             'start': [],
-            'dir': '',
+            "direction": '',
             'occupied': []
         },
         'destroyer': {
             'length': 3,
             'legend': 'Destroyer',
             'start': [],
-            'dir': '',
+            "direction": '',
             'occupied': []
         },
         'patrolBoat': {
             'length': 2,
             'legend': 'Patrol Boat',
             'start': [],
-            'dir': '',
+            "direction": '',
             'occupied': []
         }
     };
@@ -51,7 +50,7 @@ var userSetup = function() {
     function startSetup() {
         for(var ship in ships) {
             if(ships.hasOwnProperty(ship)) {
-                var c = 'A';
+                var character = 'A';
 
                 // create HTML form
                 var $fd  =  $('<fieldset class="' + ship + '">').appendTo('#setup_form');
@@ -69,15 +68,12 @@ var userSetup = function() {
                 var $dirvt = $('<label><input type="radio" name="direction_'+ ship +'" value="vt">').appendTo($gr2);
 
                 // create the options 1-10 resp. A-J
-                for(var x = 0; x <= 10; x++) {
-                    if(x == 0) {
-                        $hz.append($('<option disabled selected>').attr('value', '0').text(''));
-                        $vt.append($('<option disabled selected>').attr('value', '0').text(''));
-                    } else {
-                        $hz.append($('<option>').attr('value', x).text(x));
-                        $vt.append($('<option>').attr('value', c).text(c));
-                        c = helpers().nextChar(c);
-                    }
+                $hz.append($('<option disabled selected>').attr('value', '0').text(''));
+                $vt.append($('<option disabled selected>').attr('value', '0').text(''));
+                for(var x = 1; x <= 10; x++) {
+                    $hz.append($('<option>').attr('value', x).text(x));
+                    $vt.append($('<option>').attr('value', character).text(character));
+                    character = helpers().nextChar(character);
                 }
 
                 // add html to legend
@@ -98,7 +94,8 @@ var userSetup = function() {
                         $('.' + ship + ' legend').append(ships.patrolBoat.legend);
                         break;
                     default:
-                        console.log('Error occured');
+                        $('.error.shot').addClass('active');
+                        $('.error.shot').html('An error occurred. If you cannot play anymore, please refresh page. I\'m sorry!');
                         break;
                 }
 
@@ -110,6 +107,7 @@ var userSetup = function() {
 
         // after code generation, check value changes
         $('select, input[type="radio"]').change(function() {
+            $('.error').removeClass('active');
             checkPositionRules($(this));
         });
     }
@@ -120,13 +118,15 @@ var userSetup = function() {
      */
     function getPosition() {
         for(var ship in ships) {
-            var $hzS = $('select#' + ship + '_hz').val();
-            var $vtS = $('select#' + ship + '_vt').val();
-            var $dir = $('input[type="radio"][name="direction_'+ ship +'"]:checked').val();
+            if(ships.hasOwnProperty(ship)) {
+                var $hzS = $('select#' + ship + '_hz').val();
+                var $vtS = $('select#' + ship + '_vt').val();
+                var $dir = $('input[type="radio"][name="direction_' + ship + '"]:checked').val();
 
-            ships[ship].start.push($hzS);
-            ships[ship].start.push($vtS);
-            ships[ship].dir = $dir;
+                ships[ship].start.push($hzS);
+                ships[ship].start.push($vtS);
+                ships[ship].direction = $dir;
+            }
         }
         setupBattlefield(ships);
     }
@@ -142,7 +142,7 @@ var userSetup = function() {
             $occ  = $ship.occupied;
 
         if(input.is('input[type="radio"')) {
-            $ship.dir = $('input[type="radio"][name="direction_'+ $name +'"]:checked').val();
+            $ship.direction = $('input[type="radio"][name="direction_'+ $name +'"]:checked').val();
         }
 
         if( $('select#' + $name + '_hz').val() != null) {
@@ -152,13 +152,15 @@ var userSetup = function() {
             $occ[1] = $('select#' + $name + '_vt').val();
         }
 
-        if($ship.dir !== '' && $occ.length >= 2) {
+        // TODO: make it recursive
+        if($ship.direction !== '' && $occ.length >= 2) {
             // get all fields, which are touched by the ship
             var result = calcOccupied($name);
             if(!result) {
                 $('#' + $name + '_hz').prop('selectedIndex', 0);
                 $('#' + $name + '_vt').prop('selectedIndex', 0);
-                alert('This entry is not allowed. Ship is not inside the grid anymore!');
+                $('.error.overlapping').addClass('active');
+                $('.error.overlapping').html('This entry is not allowed!<br>Ship\'s position is outisde the grid!');
                 return;
             } else {
                 // compare, if any field is already touched by another ship
@@ -167,15 +169,15 @@ var userSetup = function() {
                     $('#' + $name + '_hz').prop('selectedIndex', 0);
                     $('#' + $name + '_vt').prop('selectedIndex', 0);
                     ships[$name].occupied = [];
-                    alert('This entry is not allowed. Ships are overlapping. Please check on your last input!');
+                    $('.error.overlapping').addClass('active');
+                    $('.error.overlapping').html('This entry is not allowed!<br>Ships are overlapping. Please check on your last input!');
                     result = true;
-                } else if(result == "done") {
+                } else if(result === "done") {
                     $('button#done').prop('disabled', false);
                 }
             }
         }
     }
-
 
     /**
      * calc fields occupied by user's ships and save them
@@ -185,29 +187,29 @@ var userSetup = function() {
         var $ship = ships[$name],
             $occ = $ship.occupied,
             $tmp = [],
-            n = 0;
+            n = 0,
+            x = 0;
 
-        if($ship.dir == 'hz') {
-            for(var x = 0; x < $ship.length; x++) {
+        if($ship.direction === 'hz') {
+            for(x = 0; x < $ship.length; x++) {
                 n = x + parseInt($occ[0]);
                 if(n > 10)
                     return false;
                 $tmp.push(n + $occ[1]);
             }
-        } else if($ship.dir == 'vt') {
-            var c = $occ[1];
-            $tmp.push($occ[0] + c);
-            for(var x = 0; x < ($ship.length-1); x++) {
-                c = helpers().nextChar(c);
-                if(c > 'J') {
-                    console.log('>J');
+        } else if($ship.direction === 'vt') {
+            var character = $occ[1];
+            $tmp.push($occ[0] + character);
+            for(x = 0; x < ($ship.length-1); x++) {
+                character = helpers().nextChar(character);
+                if(character > 'J') {
                     return false;
                 }
-                $tmp.push($occ[0] + c);
+                $tmp.push($occ[0] + character);
             }
         }
         $ship.occupied = [];
-        for(var x = 0; x < $tmp.length; x++) {
+        for(x = 0; x < $tmp.length; x++) {
             $ship.occupied.push($tmp[x]);
         }
         return true;
@@ -231,20 +233,19 @@ var userSetup = function() {
         var $sorted_con = $con.sort();
 
         for (var i = 0; i < $con.length - 1; i++) {
-            if ($sorted_con[i + 1] == $sorted_con[i]) {
+            if ($sorted_con[i + 1] === $sorted_con[i]) {
                 r = false;
                 return r;
             }
         }
 
-        if ($con.length == 17) {
+        if ($con.length === 17) {
             gamePlay.usersOccs = $tmp[0].concat($tmp[1], $tmp[2], $tmp[3], $tmp[4]);
             return r = "done";
         }
         return r;
     }
 
-    // Interface
     return {
         startSetup:startSetup,
         getPosition:getPosition

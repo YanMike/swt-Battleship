@@ -1,7 +1,9 @@
+"use strict";
+
 /**
  * main.js contains document.ready() functions to let the user start the setup
  */
-$(document).ready(function() {
+$(function() {
     $('button#start_setup').click(function() {
         $('section.instruction').hide();
         $('section.setup').show();

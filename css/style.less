@@ -3,6 +3,26 @@ section {
   width: 600px;
   margin: 0 auto;
 }
+
+.error {
+  display: none;
+  position: absolute;
+  width: 290px;
+  color: red;
+  padding: 15px;
+  border: 1px solid grey;
+  &.overlapping {
+    top: 360px;
+    left: 0px;
+  }
+  &.shot {
+    top: 670px;
+    left: 692px;
+  }
+}
+.active {
+  display: block;
+}
 /* *** */
 
 

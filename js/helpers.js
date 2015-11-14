@@ -7,7 +7,7 @@
 
 var helpers = function() {
 
-    /*
+    /* grid to see the ranges at a glance
      *    |     1   |    2    |    3    |    4    |    5    |    6    |    7    |    8    |    9    |    10   |
      *  -------------------------------------------------------------------------------------------------------
      *  A |  51, 51 | 101, 51 | 151, 51 | 201, 51 | 251, 51 | 301, 51 | 351, 51 | 401, 51 | 451, 51 | 501, 51 |
@@ -69,7 +69,6 @@ var helpers = function() {
      */
     function translate(param) {
         if($.isArray(param)) {
-            // translate from 1-10 to px
             return {
                 'x1': param[0] * 50 + 1,
                 'x2': param[0] * 50 + 49,
@@ -77,7 +76,6 @@ var helpers = function() {
                 'y2': param[1] * 50 + 49
             };
         } else {
-            // translate from px to 1-10
             return  Math.floor(param / 50);
         }
     }
@@ -120,7 +118,8 @@ var helpers = function() {
                 pos = "10";
                 break;
             default:
-                console.log('Error occured');
+                $('.error.shot').addClass('active');
+                $('.error.shot').html('An error occurred. If you cannot play anymore, please refresh page. I\'m sorry!');
                 break;
         }
         return pos;
@@ -163,13 +162,13 @@ var helpers = function() {
                 pos = "J";
                 break;
             default:
-                console.log('Error occured');
+                $('.error.shot').addClass('active');
+                $('.error.shot').html('An error occurred while battlefield setup. If you cannot play anymore, please refresh page. I\'m sorry!');
                 break;
         }
         return pos;
     }
 
-    // Interface
     return {
         translate:translate,
         transCharToInt:transCharToInt,

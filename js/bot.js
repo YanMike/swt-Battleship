@@ -85,35 +85,35 @@ var bot = function() {
      * random shooting for easiest level of difficulty
      */
     function huntMode() {
-        var $hz,
-            $vt,
+        var $horizontal,
+            $vertical,
             $tmp = '';
 
         do {
-            $hz = Math.ceil(Math.random() * 10);
-            if($hz == 0) {
-                $hz = 1;
+            $horizontal = Math.ceil(Math.random() * 10);
+            if($horizontal === 0) {
+                $horizontal = 1;
             }
 
-            $vt = Math.ceil(Math.random() * 10);
-            if($vt == 0) {
-                $vt = 1;
+            $vertical = Math.ceil(Math.random() * 10);
+            if($vertical === 0) {
+                $vertical = 1;
             }
-            $vt = helpers().transIntToChar($vt);
+            $vertical = helpers().transIntToChar($vertical);
 
-            $tmp = '' + $hz + $vt;
+            $tmp = '' + $horizontal + $vertical;
         } while($.inArray($tmp, gamePlay.botShots) > -1);
 
 
         gamePlay.botShots.push($tmp);
         gamePlay.botShots.sort();
 
-        var $pos = [$hz, $vt];
+        var $pos = [$horizontal, $vertical];
         return $pos;
     }
 
     /**
-     * status: DEVELOPMENT is IN PROGRESS. NOT WORKING YET
+     * TODO: function targetMode() {}
      * shooting algorithm for 2nd level of difficulty
 
      *  strike == true  ? check4randomly : huntMode
@@ -123,75 +123,9 @@ var bot = function() {
      *  next round: strike ? checkNextOnThatSide : huntMode(ship sunk)
 
      */
-    function targetMode() {
-        var $shot = huntMode();
-    }
 
-    /**
-     * status: DEVELOPMENT is IN PROGRESS. NOT WORKING YET
-     */
-    function generateShipPositions() {
-        var $tmp = [];
-
-        // get random start and proof that position is inside grid
-        for (var name in botShips) {
-        console.log(' ####### ' + name);
-
-        var $ship = botShips[name];
-        do {
-            var $dir = Math.ceil(Math.random() * 2);
-        } while($dir == 0);
-
-        $dir == 1 ? $dir = 'hz' : $dir = 'vt';
-
-        console.log('dir: ' + $dir);
-
-        do {
-            var $hz = Math.ceil(Math.random() * 10);
-            if($dir === 'hz') {
-                var x = $hz + $ship.occupied;
-            }
-        } while ($hz == 0 || x > 10);
-
-        console.log('hz: ' + $hz);
-
-        do {
-            var $vt = Math.ceil(Math.random() * 10);
-            var $vtNo = $vt;
-            $vt = helpers().transIntToChar($vt);
-            if($dir === 'vt') {
-                var char = $vt;
-                for (var c = 0; c < ($ship.length - 1); c++) {
-                    char = helpers().nextChar(char);
-                }
-            }
-        } while ($vtNo == 0 || char > 'J');
-
-        console.log('vt: ' + $vt);
-
-        // get all occupied positions
-        if($dir == 'hz') {
-            for(var x = 0; x < ($ship.length); x++) {
-                var n = x + $hz;
-                $tmp.push(n + $vt);
-            }
-        } else {
-            var c = $vt;
-            for(var x = 0; x < ($ship.length-1); x++) {
-                c = helpers().nextChar(c);
-            }
-                $tmp.push($hz + 'c');
-            }
-        }
-        console.log($tmp);
-    }
-
-    // Interface
     return {
         init:init,
         play:play
     };
 };
-
-
-

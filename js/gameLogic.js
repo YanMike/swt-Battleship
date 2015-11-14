@@ -6,7 +6,7 @@
  */
 
 /**
- * global storage for savegame
+ * global storage for savegame (singleton)
  * @type {{userShots: Array, botShots: Array, isUsersTurn: boolean, botOccs: Array, usersOccs: Array}}
  */
 var gamePlay = {
@@ -26,20 +26,20 @@ var gameLogic = function() {
      * @param ctxTr
      */
     function detectShot(evt, ctxBf, ctxTr) {
-        var c = "@";
+        var character = "@";
         var field = battlefield.getBoundingClientRect();
-        var $hz = evt.clientX - field.left;
-        var $vt = evt.clientY - field.top;
+        var $horizontal = evt.clientX - field.left;
+        var $vertical = evt.clientY - field.top;
 
         $('.user-turn').hide();
 
-        $hz = helpers().translate($hz);
-        $vt = helpers().translate($vt);
-        for(var x = 0; x < $vt; x++) {
-            c = helpers().nextChar(c);
+        $horizontal = helpers().translate($horizontal);
+        $vertical = helpers().translate($vertical);
+        for(var x = 0; x < $vertical; x++) {
+            character = helpers().nextChar(character);
         }
 
-        var $shot = $hz + c;
+        var $shot = $horizontal + character;
 
         if($.inArray($shot, gamePlay.userShots) < 0) {
             var $strike = strikeOrNotIsHereTheQuestion($shot);
@@ -50,17 +50,9 @@ var gameLogic = function() {
             // TODO: show overview of sunk ships
             bot().play(ctxTr);
         } else {
-            alert('Already clicked. Choose other field.');
+            $('.error.shot').addClass('active')
+            .html('Already clicked. Choose another field.');
         }
-
-        /* Step 1
-         *   1) strikeOrNotIsHereTheQuestion($hz, $vt);
-         *   2) check if ship was sunk
-         *   3) draw result
-         *   4) trigger bot shooting
-         *   ... bot
-         *   come back
-         */
     }
 
     /**
@@ -69,16 +61,14 @@ var gameLogic = function() {
      * @returns {boolean}
      */
     function strikeOrNotIsHereTheQuestion(coord) {
+        var arr = [];
         if(gamePlay.isUsersTurn) {
-            var arr = gamePlay.botOccs;
+            arr = gamePlay.botOccs;
         } else {
-            var arr = gamePlay.usersOccs;
+            arr = gamePlay.usersOccs;
         }
-        if($.inArray(coord, arr) > -1) {
-            return true;
-        } else {
-            return false;
-        }
+        var $isStrike = $.inArray(coord, arr) > -1;
+        return ($isStrike);
     }
 
     /**
@@ -111,7 +101,6 @@ var gameLogic = function() {
         }
     }
 
-    // Interface
     return {
         detectShot:detectShot,
         strikeOrNotIsHereTheQuestion:strikeOrNotIsHereTheQuestion,
