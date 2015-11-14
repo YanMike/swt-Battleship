@@ -1,6 +1,7 @@
 # swt-Battleship
 
 Purpose of this project is to get "hands on code" for a software engineering seminar. 
+It is also used for further tasks: Clean Code Development and Distributed Version Control System.
 
 ## Description 
 This game is just a prototyp. Bot knows only one possible setup for its ships. Bot can only shoot randomly (no algorithm). 
